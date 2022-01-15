@@ -13,7 +13,7 @@ const NavBar = () => {
         { title: 'The Animus', href:'/#animus'},
         { title: 'Helix', href:'/#helix'},
         { title: 'Early Access', href:'/#early-access'},
-        { title: 'Join Abstergo', href:'/#join-abstergo'},
+        { title: 'Join Abstergo', href:'/#join-abstergo'}
     ];
 
     const handleClick = () => {
