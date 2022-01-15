@@ -42,7 +42,7 @@ const EmploymentApp = () => {
         e.preventDefault();
         try {
             const body = form;
-            const res = await fetch("http://localhost:5000/applicants",{
+            const res = await fetch("/applicants",{
                 method: 'POST',
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(body)
