@@ -1,13 +1,11 @@
-import { AppBar, Button, Container, Grid, Link, Menu, MenuItem, Toolbar } from '@material-ui/core';
+import { AppBar, Button, Grid, Link, Menu, MenuItem, Toolbar } from '@material-ui/core';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import useStyles from './styles';
 import abstergoLogo from '../../assets/abstergo-1.png';
 
 const NavBar = () => {
     const [ toggleMenu, setToggleMenu ] = useState(false);
-    const nav = useNavigate();
     const classes = useStyles();
 
     const menuLinks = [
@@ -35,15 +33,15 @@ const NavBar = () => {
                             <Menu open={toggleMenu ? true : false} onClose={() => setToggleMenu(false)}>
                                 {
                                     menuLinks.map(({ title, href }) => (
-                                        <MenuItem component={Button} onClick={() => setToggleMenu(false)} href={href}>{title}</MenuItem>
+                                        <MenuItem component={Button} onClick={() => setToggleMenu(false)} href={href} key={title}>{title}</MenuItem>
                                     ))
                                 }
                             </Menu>
                          </div>
                         {
                             menuLinks.map(({ title, href }) => (
-                                <Grid item className={classes.menuLink}>
-                                    <Link underline='none' color='info' component={Button} variant='body2' href={href}>{title}</Link>
+                                <Grid item className={classes.menuLink} key={title}>
+                                    <Link underline='none' color='initial' component={Button} variant='body2' href={href}>{title}</Link>
                                 </Grid>
                             ))
                         }
