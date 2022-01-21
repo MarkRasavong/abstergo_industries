@@ -2,16 +2,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const pool = require('./db');
-const path = require('path');
 
 //middleware
 app.use(cors());
 app.use(express.json());
 
-if (process.env.NODE_ENV === "production") {
-    //serve static content (our build folder) //__dirname == current directory location (root folder)
-    app.use(express.static(path.join(__dirname, "client/build")))
-}
+const PORT = process.env.PORT || 5000;
 
 //ROUTES//
 
@@ -19,12 +15,15 @@ if (process.env.NODE_ENV === "production") {
 app.post("/subscriptions", async (req, res) => {
     try {
         const { first_name, surname, birthdate, email, } = req.body;
-        const newSubscriber = await pool.query(
+        const results = await pool.query(
             "INSERT INTO subscriptions (first_name, surname, birthdate, email) VALUES ($1, $2, $3, $4) RETURNING *",
             [first_name, surname, birthdate, email]
         );
 
-        res.json(newSubscriber.rows[0]);
+        res.status(200).json({
+            status: "success",
+            data: results.rows[0],
+        });
     } catch (e) {
         console.log(e);
     }
@@ -33,9 +32,13 @@ app.post("/subscriptions", async (req, res) => {
 //get all subscribers
 app.get('/subscriptions', async (req, res) => {
     try {
-        const allSubscribers = await pool.query("SELECT * FROM subscriptions");
+        const results = await pool.query("SELECT * FROM subscriptions");
 
-        res.json(allSubscribers.rows);
+        res.status(200).json({
+            status: "success",
+            results: results.rows.length,
+            data: results.rows,
+        });
     } catch (e) {
         console.log(e.message);
     }
@@ -47,10 +50,16 @@ app.get('/subscriptions', async (req, res) => {
 app.get("/subscriptions/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const subscriber = await pool.query("SELECT * FROM subscriptions WHERE subscriber_id = $1", [
+        const results = await pool.query("SELECT * FROM subscriptions WHERE subscriber_id = $1", [
             id,
         ]);
-        res.json(subscriber.rows[0]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                data: results.rows[0]
+            }
+        })
     } catch (err) {
         console.error(err.message);
     }
@@ -63,7 +72,10 @@ app.delete("/subscriptions/:id", async (req, res) => {
         const deleteSubscriber = await pool.query("DELETE FROM subscriptions WHERE subcriber_id = $1", [
             id,
         ]);
-        res.json("subscriber was deleted");
+        res.status(201).json({
+            status: "success",
+            data: results.rows[0],
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -75,12 +87,15 @@ app.post("/applicants", async (req, res) => {
     try {
         const { first_name, surname, birthdate, email, contact_number,
             live_in_major_city, city, subdivision, country } = req.body;
-        const newApplicant = await pool.query(
+        const results = await pool.query(
             "INSERT INTO applicants (first_name, surname, birthdate, email, contact_number, live_in_major_city, city, subdivision, country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
             [first_name, surname, birthdate, email, contact_number, live_in_major_city, city, subdivision, country]
         );
 
-        res.json(newApplicant.rows[0]);
+        res.status(200).json({
+            status: "success",
+            data: results.rows[0],
+        });
     } catch (e) {
         console.log(e);
     }
@@ -89,9 +104,13 @@ app.post("/applicants", async (req, res) => {
 //get all applicants
 app.get('/applicants', async (req, res) => {
     try {
-        const allApps = await pool.query("SELECT * FROM applicants");
+        const results = await pool.query("SELECT * FROM applicants");
 
-        res.json(allApps.rows);
+        res.status(200).json({
+            status: "success",
+            results: results.rows.length,
+            data: results.rows,
+        });
     } catch (e) {
         console.log(e.message);
     }
@@ -101,10 +120,16 @@ app.get('/applicants', async (req, res) => {
 app.get("/applicants/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const applicant = await pool.query("SELECT * FROM applicants WHERE applicant_id = $1", [
+        const results = await pool.query("SELECT * FROM applicants WHERE applicant_id = $1", [
             id,
         ]);
-        res.json(applicant.rows[0]);
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                data: results.rows[0]
+            }
+        })
     } catch (err) {
         console.error(err.message);
     }
@@ -118,7 +143,10 @@ app.delete("/applicants/:id", async (req, res) => {
         const deleteApplicant = await pool.query("DELETE FROM applicants WHERE applicant_id = $1", [
             id,
         ]);
-        res.json("Applicant was deleted");
+        res.status(201).json({
+            status: "success",
+            data: results.rows[0],
+        });
     } catch (err) {
         console.error(err.message);
     }
@@ -126,10 +154,8 @@ app.delete("/applicants/:id", async (req, res) => {
 
 
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client/build/index.html"));
+    res.json({ message: "Please redirect to the appropriate route." })
 });
-
-const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server has started on port ${PORT}`);

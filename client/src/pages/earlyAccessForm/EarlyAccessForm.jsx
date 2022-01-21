@@ -2,6 +2,7 @@ import { Button, Container, Grid, InputLabel, Paper, Typography } from '@materia
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/input/Input';
 import React, {useState} from 'react';
+import AbstergoIndustries from '../../apis/AbstergoIndustries';
 import useStyles from './styles';
 import abstergoLogo from '../../assets/abstergo-color-logo.png';
 
@@ -18,20 +19,15 @@ const EarlyAccessForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const body = form;
-            const res = await fetch("/subscriptions",{
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(body)
-            }).then(
+        AbstergoIndustries.post("/subscriptions",
+            form
+        )
+            .then(() => {
                 nav("/sub-success")
-            );
-
-            console.log(res);
-        } catch (error) {
-            console.log(error);
-        }
+            })
+            .catch((error) => {
+              console.error(error.message);
+            });
     };
 
     const handleChange = e => {

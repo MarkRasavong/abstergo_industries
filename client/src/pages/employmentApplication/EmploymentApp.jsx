@@ -5,7 +5,7 @@ import abstergoLogo from '../../assets/abstergo-2.png';
 import { Button, Container, Grid, InputLabel, MenuItem, Paper, Select, Typography } from '@material-ui/core';
 import Input from '../../components/input/Input';
 import { Country, State } from 'country-state-city';
-import EmploymentSuccess from '../../components/employmentSuccess/EmploymentSuccess';
+import AbstergoIndustries from '../../apis/AbstergoIndustries';
 
 const EmploymentApp = () => {
     const nav = useNavigate();
@@ -40,18 +40,15 @@ const EmploymentApp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const body = form;
-            const res = await fetch("/applicants",{
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(body)
+        await AbstergoIndustries.post("/applicants",
+            form
+        )
+            .then(() => {
+                nav("/applicant-success")
             })
-
-            nav('/applicant-success')
-        } catch (error) {
-            console.log(error);
-        }
+            .catch((error) => {
+              console.error(error.message);
+            });
     };
 
     const handleCountry = (e) => {
