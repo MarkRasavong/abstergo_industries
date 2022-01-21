@@ -5,7 +5,7 @@ const AbstergoIndustries = axios.create({
     baseURL:
         process.env.NODE_ENV !== "production"
             ? "http://localhost:5000"
-            : "https://lista-de-todos.herokuapp.com",
+            : "https://abstergo-industries.herokuapp.com",
     timeout: 5000,
 });
 
