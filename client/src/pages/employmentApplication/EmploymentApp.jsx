@@ -42,7 +42,7 @@ const EmploymentApp = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("/applicants", {
+            const response = await fetch("https://abstergo-industries.herokuapp.com/applicants", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: form,
