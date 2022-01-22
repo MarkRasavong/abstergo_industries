@@ -14,7 +14,7 @@ const EarlyAccessForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("https://abstergo-industries.herokuapp.com/subscriptions", {
+            const response = await fetch("/subscriptions", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: form
