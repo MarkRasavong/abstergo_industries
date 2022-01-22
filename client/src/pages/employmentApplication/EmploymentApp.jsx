@@ -40,15 +40,18 @@ const EmploymentApp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await AbstergoIndustries.post("/applicants",
-            form
-        )
-            .then(() => {
-                nav("/applicant-success")
-            })
-            .catch((error) => {
-              console.error(error.message);
+
+        try {
+            const response = await fetch("/applicants", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: form,
             });
+            nav("/applicant-success");
+          } catch (err) {
+            console.error(err.message);
+          }
+
     };
 
     const handleCountry = (e) => {

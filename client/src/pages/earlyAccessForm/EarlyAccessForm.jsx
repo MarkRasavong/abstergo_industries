@@ -11,23 +11,18 @@ const EarlyAccessForm = () => {
     const [ form, setForm ] = useState({first_name: '', surname: '', birthdate: '', email: '', confirmEmail: '' });
     const classes = useStyles();
 
-    {/* 
-    //Proxy is only use in dev so it will be ignored in production builds
-    //if there is not localhost:5000 then by default it is going to use heroku documentation
-    //this heroku app is just our server serving the build static content and also holding the restful api
-    */}
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        AbstergoIndustries.post("/subscriptions",
-            form
-        )
-            .then(() => {
-                nav("/sub-success")
-            })
-            .catch((error) => {
-              console.error(error.message);
+        try {
+            const response = await fetch("/subscriptions", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: form
             });
+            nav("/sub-success");
+          } catch (err) {
+            console.error(err.message);
+          }
     };
 
     const handleChange = e => {

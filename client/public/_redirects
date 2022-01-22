@@ -1,2 +1,3 @@
-https://abstergo-industries.herokuapp.com/ https://abstergo-industries.herokuapp.com/ 200
+/subscriptions https://abstergo-industries.herokuapp.com/subscriptions 200
+/applicants https://abstergo-industries.herokuapp.com/applicants 200
 /* /index.html 200
